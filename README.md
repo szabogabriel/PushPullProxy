@@ -34,21 +34,22 @@ The Pull server connects to the ports 8081 and to 9998. It reads the request, an
 Performance and latency
 -----------------------
 
-Since this project is just a PoC, it wasn't optimized for performance. It could however be used to test for minimal latency of such a system.
+Since this project is just a PoC, it wasn't optimized for performance. It could however be used to test for minimal latency of such a system and for some theoretical throughputs.
 
-A simple KeyValue Store was written in Rapidoid with a latency between 1ms and 2ms.
+A simple KeyValue Store was written in Rapidoid with a latency between 1ms and 2ms to test this application.
 
-When connecting via the PPP, the latency was aroudn 3ms to 6ms. This was probably due to the fact, that the internal Queue in the Push server is checked once every 1ms, if it is empty.
+When connecting via the PPP, the latency was around 3ms to 6ms. This was besides the obvious latency of pushing through two additional servers also caused by the fact, that the internal Queue in the Push server is checked once every 1ms, if it was empty.
 
-When testing for throughput, there wasn't any real difference in regard to the throughput. The main difference is however, that both the Push and the Pull server caches the data in memory. No real forwarding is currently performed. The results:
+When testing for performance, there wasn't any real difference in regard to the throughput. The main difference is however, that both the Push and the Pull server caches the data in memory. No real forwarding is currently performed. The results are a bit confusing, but at least visible, that a more complex system can produce bigger delays, as two, rather small reverse proxies.
 
 ```
+Direct access:
 real	0m0,034s
 user	0m0,003s
 sys	0m0,013s
 
 
-
+PPP access:
 real	0m0,030s
 user	0m0,015s
 sys	0m0,005s
