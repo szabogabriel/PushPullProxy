@@ -4,25 +4,32 @@ Push-Pull Proxy
 Introduction
 ------------
 
-This project is the PoC implementation of a Push-Pull Proxy (PPP). The basic idea is to divide up a classical proxy server to two parts:
+This project is the PoC implementation of a Push-Pull Proxy (PPP). The basic idea is to divide up a classical proxy server into two parts:
 
 * push: placed in a DMZ, it accepts incoming connections from the internet and from the intranet.
 * pull: placed in the intranet, it connects to the push proxy and forwards data to a server in the intranet.
 
-After setting up the two servers, it basically works as a normal proxy server with the difference being, that it can tunnel data into a safe zone from a DMZ.
+After setting up the two servers, it basically works as a normal reverse proxy server with the difference being, that it can tunnel data into a safe zone from a DMZ, without initiating a connection into it.
 
 The implementation
 ------------------
 
-The project is consisted of two basic Java projects: `PPP_Push` and `PPP_Pull`. Both projects are implemented by using the standard Java library of version 1.8. No Java 8-specific features were used, so theoretically the code should be fine with earlier versions as well.
+The project consists of two basic Java projects: `PPP_Push` and `PPP_Pull`. Both projects are implemented by using the standard Java library of version 1.8. No Java 8-specific features were used, so theoretically the code should be fine with earlier versions as well.
 
-Both projects contain a `Main` class, which currently hard codes the settings. Both servers operate on localhost.
+Both projects contain a `Main` class, which currently hard codes the settings (hosts, ports). Both servers operate on localhost.
 
-The Pull server 
-
-The Push server listens on the ports 8080 and 8081. It is able to accept a greater amount of connections. For every connection it creates a thread, pushes the request into memory and waits. Another thread consumes the messages and forwards them to the Pull server. There is only one request forwarded at a time. Rest of the requests are stopped, until the previous one is answered.
+The Push server listens on the ports 8080 and 8081. It is able to accept a greater amount of connections. For every connection it creates a thread, pushes the request into a threadsafe queue and waits for the response. Another thread consumes the messages and forwards them to the Pull server. There is only one request forwarded at a time. Rest of the requests are stopped, until the previous one is answered.
 
 The Pull server connects to the ports 8081 and to 9998. It reads the request, and forwards it. Upon receiving the response, it writes the data back to the Push server.
+
+```
+     Internet     [Firewall]      DMZ      [Firewall]                    Intranet
+                      |                        |                                                       |
+                      |                        |                                                       |
+ [Remote machine] ----|----> [Push Proxy] <----|---- [Pull Proxy] --------> [Intranet Server/Service]  |
+                      |                        |                                                       |
+                      |                        |                                                       |
+```
 
 Performance and latency
 -----------------------
