@@ -30,7 +30,7 @@ public class ForwardHandler implements Runnable {
 					handleRequestHolder(tmp);
 				} else {
 					try {
-						Thread.sleep(10);
+						Thread.sleep(1);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -43,10 +43,8 @@ public class ForwardHandler implements Runnable {
 
 	private void handleRequestHolder(RequestHolder holder) {
 		try {
-			System.out.println("[PushProxy - ForwardHandler] Found data in queue. Forwarding it.");
 			OUT.write(holder.getDATA());
 			byte[] tmp = StreamUtil.readInputStream(IN);
-			System.out.println("[PushProxy - ForwardHandler] Received response.");
 			holder.getHANDLER().finished(tmp);
 		} catch (IOException e) {
 			e.printStackTrace();

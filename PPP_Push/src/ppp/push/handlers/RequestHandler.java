@@ -26,8 +26,6 @@ public class RequestHandler implements Runnable {
 	public void run() {
 		try {
 			byte[] tmp = StreamUtil.readInputStream(IN);
-			System.out.println("[PushProxy - RequestHandler] Received request: " + new String(tmp));
-			System.out.println("[PushProxy - RequestHandler] Forwarding it.");
 			QUEUE.add(new RequestHolder(this, tmp));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -36,8 +34,6 @@ public class RequestHandler implements Runnable {
 	
 	public void finished(byte[] response) {
 		try {
-			System.out.println("[PushProxy - RequestHandler] Received response: " + new String(response));
-			System.out.println("[PushProxy - RequestHandler] Forwarding it.");
 			OUT.write(response);
 		} catch (IOException e) {
 			e.printStackTrace();
