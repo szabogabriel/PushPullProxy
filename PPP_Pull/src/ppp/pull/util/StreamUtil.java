@@ -15,12 +15,28 @@ public class StreamUtil {
 		int read;
 		do {
 			read = IN.read(BUFFER);
-			if (read > 1) {
+			if (read >= 0) {
 				tmp = Arrays.copyOf(tmp, origLength + read);
 				System.arraycopy(BUFFER, 0, tmp, origLength, read);
 				origLength += read;
 			}
 		} while (read > 0 && IN.available() > 0);
+		return tmp;
+	}
+	
+	public static byte[] readInputStreamUntilDefinetlyFinished(InputStream IN) throws IOException {
+		byte[] BUFFER = new byte[BUFFER_SIZE];
+		byte[] tmp = new byte[0];
+		int origLength = 0;
+		int read;
+		do {
+			read = IN.read(BUFFER);
+			if (read >= 0) {
+				tmp = Arrays.copyOf(tmp, origLength + read);
+				System.arraycopy(BUFFER, 0, tmp, origLength, read);
+				origLength += read;
+			}
+		} while (read > 0);
 		return tmp;
 	}
 

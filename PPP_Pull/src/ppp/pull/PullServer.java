@@ -35,7 +35,7 @@ public class PullServer implements Runnable {
 				forwardIn = fl.getInputStream();
 				forwardOut = fl.getOutputStream();
 				forwardOut.write(data);
-				resp = StreamUtil.readInputStream(forwardIn);
+				resp = StreamUtil.readInputStreamUntilDefinetlyFinished(forwardIn);
 				try {
 					forwardIn.close();
 				} catch (Exception ex) 
