@@ -23,6 +23,10 @@ public class PushServerMain extends AbstractServer {
 	public static void main(String[] args) throws IOException {
 		new PushServerMain(8080, 8081);
 	}
+	
+	public PushServerMain(RuntimeArguments args) {
+		this(args.getRequestPort(), args.getForwardPort());
+	}
 
 	public PushServerMain(int requestPort, int forwardPort) {
 		execute(() -> runRequestServerSocket(requestPort));

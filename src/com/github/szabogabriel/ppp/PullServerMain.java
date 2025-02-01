@@ -16,10 +16,14 @@ public class PullServerMain extends AbstractServer {
 	public static void main(String[] args) {
 		new PullServerMain("localhost", 8081, "localhost", 18080);
 	}
+	
+	public PullServerMain(RuntimeArguments args) {
+		this(args.getForwardHost(), args.getForwardPort(), args.getTargetHost(), args.getTargetPort());
+	}
 
-	public PullServerMain(String pushHost, int pushPort, String forwardUrl, int forwardPort) {
-		this.targetUrl = forwardUrl;
-		this.targetPort = forwardPort;
+	public PullServerMain(String pushHost, int pushPort, String targetUrl, int targetPort) {
+		this.targetUrl = targetUrl;
+		this.targetPort = targetPort;
 
 		execute(() -> createSocket(pushHost, pushPort));
 	}
