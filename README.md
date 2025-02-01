@@ -54,3 +54,30 @@ real	0m0,030s
 user	0m0,015s
 sys	0m0,005s
 ```
+
+Alternatives
+------------
+
+If you have SSH connection to the DMZ machine, you can use the SSH protocol insteads. Meaning, you can log in by using the `-R` switch instead which will result in a port forward as specified. For example:
+
+```Bash
+ssh -R 8080:localhost:80 my_user@my_server.com
+```
+
+will port forward requests from the remote machines 8080 port to your local port 80. The only thing you have to do is to configure a reverse proxy forwarding requests to the 8080 port. For example in Nginx:
+
+```
+server {
+    listen 80;
+    server_name your-dns-name.com;
+    
+    location / {
+        proxy_pass http://localhost:8080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+
